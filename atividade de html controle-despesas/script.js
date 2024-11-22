@@ -2,6 +2,10 @@ const transactionUl = document.querySelector("#transactions");
 const incomeDisplay = document.querySelector('#money-plus')
 const despDisplay = document.querySelector('#money-minus')
 const balanceDisplay = document.querySelector('#balance')
+const form = document.querySelector('#form')
+const inputTransactionName = document.querySelector('#text')
+const inputTransactionAmount = document.querySelector('#amount') 
+console.log(form)
 // console.log({incomeDisplay, expenseDisplay, balanceDisplay});
 
 const dummyTransactions = [
@@ -66,6 +70,20 @@ const init = () => {
 };
 
 init();
+
+const generateID = ()=> Math.round(Math.random()*1000)
+
+form.addEventListener('submit', event => {
+  event.preventDefault()
+  const transName = inputTransactionName.value.trim()
+  const transAmount = inputTransactionAmount.value.trim()
+  if(transName==='' || transAmount === ''){
+   alert('Por gentileza preencha tanto o nome quanto o valor da transação!!!')
+   return
+  }
+  const transaction = { id: generateID(), name: transName, amount: transAmount }
+})
+
 
 // const numbers = [1, 2, 3];
 // const sum = numbers.reduce((accumulator, number) => accumulator + number, 0);
