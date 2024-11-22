@@ -8,12 +8,29 @@ const inputTransactionAmount = document.querySelector('#amount')
 console.log(form)
 // console.log({incomeDisplay, expenseDisplay, balanceDisplay});
 
-const dummyTransactions = [
-  { id: 1, name: "Bolo de brigadeiro", amount: - 20 },
-  { id: 2, name: "Salário", amount: 300 },
-  { id: 3, name: "Torta de limão", amount: -10 },
-  { id: 4, name: "Bateria", amount: - 150 },
-];
+// let transactions = [
+//   { id: 1, name: "Bolo de brigadeiro", amount: - 20 },
+//   { id: 2, name: "Salário", amount: 300 },
+//   { id: 3, name: "Torta de limão", amount: -10 },
+//   { id: 4, name: "Bateria", amount: - 150 },
+// ];
+
+
+const localStorageTransactions = JSON.parse(localStorage
+  .getItem('transactions'))
+
+let transactions = localStorage
+  .getItem('transactions') !== null ? localStorageTransactions : []
+
+  const upDateLocalStorage = () => {
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+const removeTransaction = ID => {
+  transactions = transactions.filter(transaction => transaction.id !== ID)
+  // console.log(transactions);
+  init( )
+}
 
 const addTransactionIntoDOM = (transaction) => {
   const operator = transaction.amount < 0 ? "-" : "+";
@@ -21,10 +38,16 @@ const addTransactionIntoDOM = (transaction) => {
   const amountWithoutOperator = Math.abs(transaction.amount);
   const li = document.createElement("li");
 
-  li.classList.add(CSSClass);
-  li.innerHTML = `
-        ${transaction.name} <span> ${operator} R$ ${amountWithoutOperator}</span><button class="delete-btn">x</button>
-  `;
+  li.classList.add(CSSClass)
+    li.innerHTML = `
+        ${transaction.name}
+        <span> ${operator} R$ ${amountWithoutOperator}</span>
+        <button class="delete-btn" onclick = "removeTransaction(${transaction.id})">
+            x
+        </button>
+  `
+
+
   transactionUl.append(li);
 //   transactionUl.prepend(li);
 
@@ -38,11 +61,11 @@ const addTransactionIntoDOM = (transaction) => {
   }
 };
 
-// addTransactionIntoDOM(dummyTransactions[0]);
-// addTransactionIntoDOM(dummyTransactions[1]);
+// addTransactionIntoDOM(transactions[0]);
+// addTransactionIntoDOM(transactions[1]);
 
 const updateBalanceValues = () => {
-    const transactionsAmounts = dummyTransactions.map(
+    const transactionsAmounts = transactions.map(
       (transaction) => transaction.amount
     );
     const total = transactionsAmounts.reduce((acumulator, transaction) => acumulator + transaction, 0).toFixed(2);
@@ -65,7 +88,8 @@ const updateBalanceValues = () => {
   
 
 const init = () => {
-  dummyTransactions.forEach(addTransactionIntoDOM);
+  transactionUl.innerHTML = ''
+  transactions.forEach(addTransactionIntoDOM);
   updateBalanceValues();
 };
 
@@ -81,7 +105,17 @@ form.addEventListener('submit', event => {
    alert('Por gentileza preencha tanto o nome quanto o valor da transação!!!')
    return
   }
-  const transaction = { id: generateID(), name: transName, amount: transAmount }
+  const transaction = { 
+    id: generateID(), 
+    name: transName, 
+    amount: Number (transAmount) }
+   //console.log(transaction);
+
+   transactions.push(transaction)
+    init()
+
+    inputTransactionName.value=''
+    inputTransactionAmount.value= ''
 })
 
 
