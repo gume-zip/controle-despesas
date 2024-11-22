@@ -1,11 +1,14 @@
 const transactionUl = document.querySelector("#transactions");
-//console.log(transactionUl);
+const incomeDisplay = document.querySelector('#money-plus')
+const despDisplay = document.querySelector('#money-minus')
+const balanceDisplay = document.querySelector('#balance')
+// console.log({incomeDisplay, expenseDisplay, balanceDisplay});
 
 const dummyTransactions = [
-  { id: 1, name: "Bolo de brigadeiro", amount: -20 },
+  { id: 1, name: "Bolo de brigadeiro", amount: - 20 },
   { id: 2, name: "Salário", amount: 300 },
   { id: 3, name: "Torta de limão", amount: -10 },
-  { id: 4, name: "Bateria", amount: 150 },
+  { id: 4, name: "Bateria", amount: - 150 },
 ];
 
 const addTransactionIntoDOM = (transaction) => {
@@ -45,11 +48,15 @@ const updateBalanceValues = () => {
     .toFixed(2);
     // console.log(income)
 
-    const desp =transactionsAmounts
+    
+    const desp = Math.abs (transactionsAmounts
     .filter((value) => value < 0 )
-    .reduce((accumulator, value)=> accumulator + value,0)
+    .reduce((accumulator, value)=> accumulator + value,0))
     .toFixed(2);
-    console.log(desp)
+
+    balanceDisplay.textContent = `R$ ${total}`
+    incomeDisplay.textContent = `R$ ${income}`
+    despDisplay.textContent = `R$ ${desp}`
   };
   
 
@@ -59,3 +66,11 @@ const init = () => {
 };
 
 init();
+
+// const numbers = [1, 2, 3];
+// const sum = numbers.reduce((accumulator, number) => accumulator + number, 0);
+// sum
+
+// const randomNumbers = [36, 97, 37, 63]
+// const numbersGreaterThan = randomNumbers.filter(item => item > 37)
+// numbersGreaterThan
